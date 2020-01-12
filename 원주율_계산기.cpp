@@ -6,11 +6,13 @@ using namespace std;
 int main(void)
 {
 	int radius;
-	cout << "¹İÁö¸§À» ÀÔ·ÂÇÏ½Ã¿À: ";
+	cout << "ë°˜ì§€ë¦„ì„ ì…ë ¥í•˜ì‹œì˜¤: ";
 	cin >> radius;
 
 	double area = 2*pi*pow(radius,2);
-	cout << "¿øÀÇ ³ĞÀÌ´Â " << area << "ÀÔ´Ï´Ù.";
+	cout << "ì›ì˜ ë„“ì´ëŠ” " << area << "ì…ë‹ˆë‹¤.";
+	
+	//github edit test
 
 	return 0;
 }
