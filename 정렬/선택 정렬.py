@@ -30,4 +30,3 @@ selection_sort(x) # x 행렬 선택 정렬
 print(timer() - start)
 print(x)
 print(test(x))
-
