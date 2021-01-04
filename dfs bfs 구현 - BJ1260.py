@@ -17,19 +17,24 @@ def dfs(start, gone, turn, lines):
             dfs(cur, gone, turn, lines)
     return turn
 
-def bfs(start, gone, turn, lines):
-    if True not in gone:
-        gone[start] = True
-        turn.append(start+1)
-    togo = []
-    for can_go in lines[start]:
-        if not gone[can_go]:
-            gone[can_go] = True
-            turn.append(can_go+1)
-            togo.append(can_go)
-    for can_go in togo:
-        bfs(can_go, gone, turn, lines)
-    return turn
+def bfs(start, can_go):
+    que = []
+    turn = []
+    visited = [False for _ in road]
+    cur = start
+    visited[cur-1] = True
+    que.append(cur)
+    turn.append(cur)
+    while len(que) > 0:
+        u = que.pop(0)
+        for i, next in enumerate(can_go[u-1]):
+            if next and visited[i] == False:
+                visited[i] = True
+                que.append(i+1)
+                turn.append(i+1)
+                print(i+1)
+                print(que)
+    print(turn)
             
 cur = V - 1
 gone = [False for _ in range(N)]
