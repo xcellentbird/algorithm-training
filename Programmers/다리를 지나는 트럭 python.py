@@ -1,3 +1,4 @@
+# 풀이 5시간짜리...
 from collections import deque
 
 def solution(bridge_length, weight, truck_weights):
