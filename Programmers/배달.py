@@ -1,85 +1,72 @@
+def get_next_route(route):
+    for passed in list(reversed(route)):
+        if not route[passed]:
+            route.popitem()
+        else:
+            return passed
+
+def get_score(road_map, route):
+    score = 0
+    towns = list(route.keys())
+    start = towns[0]
+    for end in towns[1:]:
+        score += road_map[start][end]
+        start = end
+    return score
+        
+        
 def solution(N, road, K):
     answer = 1
+    if N==1:
+        return answer
     
-    road_map = {n:[] for n in range(1,N+1)}
+    road_map = {n:{} for n in range(1,N+1)}
     for r in road:
-        for i, rm in enumerate(road_map[r[0]]):
-            if rm[0] == r[1]:
-                if rm[1] > r[2]:
-                    road_map[r[0]][i][1] = r[2]
-                break
+        if r[1] in road_map[r[0]] and road_map[r[0]][r[1]] < r[2]:
+            pass
         else:
-            road_map[r[0]].append([r[1], r[2]])
-            
-        for i, rm in enumerate(road_map[r[1]]):
-            if rm[0] == r[0]:
-                if rm[1] > r[2]:
-                    road_map[r[1]][i][1] = r[2]
-                break
-        else:
-            road_map[r[1]].append([r[0], r[2]])
+            if r[2] <= K:
+                road_map[r[0]][r[1]] = r[2]
+                road_map[r[1]][r[0]] = r[2]
+    #print(road_map)
     
-    for goal in range(2,N+1):
-        good = False
+    for goal in range(2, N+1):
+        #print('----------------', goal,'----------------')
         now = 1
-        route = {now:[]}
-        order = [now]
+        route = {now:[]} # route[지나온 마을] = [지나온 마을에서 향할 수 있는 곳]
+        found_K = False
         while True:
-            for r in road_map[now]:
-                if r[0] not in route:
-                    route[now].append(r[0])
-            
-            if not route[now]:
-                for o in reversed(order):
-                    if not route[o]:
-                        del route[o]
-                        order.pop()
-                    else:
-                        now = route[o].pop()
-                        break
-
+            if now == goal:
+                #print(route)
+                #print("goal")
+                
+                if get_score(road_map, route) <= K:
+                    found_K = True
+                    break
+                
+                route.popitem()
+                now = get_next_route(route)
             else:
-                now = route[now].pop()
-
-            while route:
-                route[now] = []
-                order.append(now)
-                if now == goal:
-
-                    score = 0
-                    start = 1
-                    for arrive in order[1:]:
-                        for A in road_map[start]:
-                            if A[0] == arrive:
-                                score+= A[1]
-                                start = arrive
-                    if score <= K:
-                        good = True
-                        break
-                    
-                    order.pop()
-                    del route[now]
-                    for o in reversed(order):
-                        if not route[o]:
-                            del route[o]
-                            order.pop()
-                        else:
-                            now = route[o].pop()
-                            
-                            break
-                else:
-                    break
+                for r in road_map[now]: # route에 없으면 가봐야할 곳 추가
+                    if r not in route:
+                        if_route = route.copy()
+                        if_route[r] = []
+                        if get_score(road_map, if_route) <= K: 
+                            route[now].append(r)
             
-            if good:
-                answer+=1
+            if not [rv for rv in route if route[rv]]:
+                #print('end')
                 break
+                
+            if not route[now]:
+                #print(route)
+                #print("it's blocked")
+                now = get_next_route(route)
             
+            now = route[now].pop()
+            route[now] = []
             
-            stop = True
-            for i in route:
-                if i:
-                    stop = False
-                    break
-            if stop or not route:
-                break
+        if found_K:
+            answer+=1
+            
     return answer
