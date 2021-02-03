@@ -1,4 +1,4 @@
-def get_next_route(route):
+def update_route(route):
     for passed in list(reversed(route)):
         if not route[passed]:
             route.popitem()
@@ -14,12 +14,8 @@ def get_score(road_map, route):
         start = end
     return score
         
-        
 def solution(N, road, K):
     answer = 1
-    if N==1:
-        return answer
-    
     road_map = {n:{} for n in range(1,N+1)}
     for r in road:
         if r[1] in road_map[r[0]] and road_map[r[0]][r[1]] < r[2]:
@@ -31,21 +27,17 @@ def solution(N, road, K):
     #print(road_map)
     
     for goal in range(2, N+1):
-        #print('----------------', goal,'----------------')
         now = 1
         route = {now:[]} # route[지나온 마을] = [지나온 마을에서 향할 수 있는 곳]
         found_K = False
         while True:
             if now == goal:
-                #print(route)
-                #print("goal")
-                
                 if get_score(road_map, route) <= K:
                     found_K = True
                     break
                 
                 route.popitem()
-                now = get_next_route(route)
+                now = update_route(route)
             else:
                 for r in road_map[now]: # route에 없으면 가봐야할 곳 추가
                     if r not in route:
@@ -55,15 +47,15 @@ def solution(N, road, K):
                             route[now].append(r)
             
             if not [rv for rv in route if route[rv]]:
-                #print('end')
                 break
                 
             if not route[now]:
-                #print(route)
-                #print("it's blocked")
-                now = get_next_route(route)
+                now = update_route(route)
             
-            now = route[now].pop()
+            if goal in route[now]:
+                now = route[now].pop(route[now].index(goal))
+            else:
+                now = route[now].pop()
             route[now] = []
             
         if found_K:
