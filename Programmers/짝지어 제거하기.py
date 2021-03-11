@@ -1,16 +1,11 @@
 def solution(s):
-    s = list(s)
-    while True:
-        stack = []
-        for letter in s:
-            if stack and stack[-1] == letter:
-                stack.pop()
-            else:
-                stack.append(letter)
-        
-        if not stack:
-            return 1
-        elif stack == s:
-            return 0
-        
-        s = stack
+    solo = []
+    for i in range(len(s)):
+        if not solo or s[i] != solo[-1]:
+            solo.append(s[i])
+        else:
+            solo.pop()
+    
+    if solo:
+        return 0
+    return 1
