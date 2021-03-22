@@ -1,3 +1,35 @@
+def min_dict(d, passed):
+    min_key = 0
+    min_value = float('inf')
+    for k, v in zip(d.keys(), d.values()):
+        if k not in passed and v < min_value:
+            min_value = v
+            min_key = k
+    return min_key, min_value
+    
+def solution(N, road, K):
+    answer = 0
+    for r in road.copy():
+        road.append([r[1], r[0], r[2]])
+    now = 1
+    score = {i: float('inf') for i in range(1, N+1)} # {vill: score}
+    score[now] = 0
+    passed = []
+
+    while len(passed) != N:
+        now = min_dict(score, passed)
+        passed.append(now[0])
+        for r in road:
+            if r[1] not in passed and r[0] == now[0] and r[2] + now[1] < score[r[1]]:
+                score[r[1]] = r[2] + now[1]
+
+    for k in score.values():
+        if k <= K:
+            answer += 1
+            
+    return answer
+
+"""
 def update_route(route):
     for passed in list(reversed(route)):
         if not route[passed]:
@@ -62,3 +94,4 @@ def solution(N, road, K):
             answer+=1
             
     return answer
+"""
