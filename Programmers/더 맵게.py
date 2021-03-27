@@ -1,19 +1,14 @@
-import heapq
+from heapq import *
 
 def solution(scoville, K):
     answer = 0
-    scoville.sort()
-    for i, food in enumerate(scoville):
-        if food > K:
-            scoville = scoville[:i+1]
+    heapify(scoville)
+    while True:
+        mn = heappop(scoville)
+        if mn >= K:
             break
-            
-    heapq.heapify(scoville)
-    while scoville[0] < K:
-        if len(scoville) < 2:
+        if not scoville:
             return -1
         answer+=1
-        new_food = heapq.heappop(scoville) + (heapq.heappop(scoville) * 2)
-        heapq.heappush(scoville, new_food)
-        
+        heappush(scoville, mn + heappop(scoville) * 2)
     return answer
