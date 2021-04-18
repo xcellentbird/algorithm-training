@@ -1,5 +1,6 @@
 from itertools import product
 from itertools import combinations
+from pprint import pprint
 import heapq
 
 MAX_DIST = 100
@@ -27,7 +28,6 @@ def get_distance(A, B, info_land, land):
                     break
             else:
                 if dist > gap[1] - gap[0] - 1 and gap[1] - gap[0] not in [1,2]:
-                    print(A, B, gap)
                     dist = gap[1] - gap[0] - 1
 
         elif Aland[1] == Bland[1]:
@@ -37,7 +37,6 @@ def get_distance(A, B, info_land, land):
                     break
             else:
                 if dist > gap[1] - gap[0] - 1 and gap[1] - gap[0] not in [1,2]:
-                    print(A, B, gap)
                     dist = gap[1] - gap[0] - 1
     
     if dist == MAX_DIST:
@@ -59,6 +58,8 @@ for j, i in product(range(N), range(M)):
         info_land[num] = loc
         num += 1
 
+#pprint(land)
+
 heap = []
 visited = [list(info_land.keys())[0]]
 answer = 0
@@ -72,11 +73,15 @@ while len(visited) != len(info_land):
     if not heap:
         answer = -1
         break
-    
-    score, next_land = heapq.heappop(heap)
-    visited.append(next_land)
-    answer += score
-    
+
+    while heap:
+        score, next_land = heapq.heappop(heap)
+        if next_land not in visited:
+            visited.append(next_land)
+            answer += score
+            break
+
+#print(visited)
 print(answer)
         
 
