@@ -7,7 +7,7 @@ input = stdin.readline
 N, L, R = map(int, input().split())
 #print(N, L, R)
 
-popu = [list(map(int, input().split())) for _ in range(N)]\
+popu = [list(map(int, input().split())) for _ in range(N)]
 #pprint(popu)
 
 dirs = [(1,0),(-1,0),(0,1),(0,-1)]
